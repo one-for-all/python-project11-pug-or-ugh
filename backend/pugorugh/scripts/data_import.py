@@ -1,13 +1,14 @@
 import os
 import django
 import sys
-from pugorugh.serializers import DogSerializer
 import json
 
 
 sys.path.append('../backend')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 django.setup()
+
+from pugorugh.serializers import DogSerializer
 
 
 with open('pugorugh/static/dog_details.json', 'r') as file:

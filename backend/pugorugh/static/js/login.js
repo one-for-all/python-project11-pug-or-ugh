@@ -9,7 +9,7 @@ var Login = React.createClass({
     TokenAuth.login(this.state.username, this.state.password, function () {
       this.props.setView("undecided");
     }.bind(this), function (message) {
-      if (error == 400) {
+      if (message == 'error') { /* temporary solution, should check for error code instead */
         this.setState({ message: "Username or password are incorrect." });
       } else {
         this.setState({ message: message });
