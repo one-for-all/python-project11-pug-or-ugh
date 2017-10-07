@@ -20,7 +20,7 @@ requirements.txt` while your virtualenv is activated.
 
 If you need to import dogs, a `data_import` script has been provided but it
 expects a `DogSerializer` and `Dog` model as outlined below to function
-properly.
+properly. python pugorugh/scripts/data_import.py from topmost backend dir.
 
 ## Models
 
