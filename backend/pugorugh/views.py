@@ -78,9 +78,14 @@ class UserDogUpdateView(UpdateAPIView):
             self.queryset.filter(user=current_user,
                                  dog=dog).get().delete()
         else:
-            self.queryset.update_or_create(user=current_user,
-                                           dog=dog,
-                                           status=status)
+            try:
+                userDog = self.queryset.get(user=current_user, dog=dog)
+                userDog.status = status
+                userDog.save()
+            except models.UserDog.DoesNotExist:
+                models.UserDog(user=current_user,
+                               dog=dog,
+                               status=status).save()
         return Response('')
 
 
