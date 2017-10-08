@@ -4,3 +4,4 @@ __pycache__
 venv
 project11_env
 *.sqlite3
+htmlcov
