@@ -5,3 +5,4 @@ venv
 project11_env
 *.sqlite3
 htmlcov
+.coverage
