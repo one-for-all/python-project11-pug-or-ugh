@@ -31,11 +31,26 @@ class DogRetrieveView(RetrieveAPIView):
             status = 'd'
         else:
             raise ValueError('{} is not valid status'.format(status))
+        preferences = models.UserPref.objects.get(user=current_user)
+        genders = preferences.gender.split(',') + ['u']
+        sizes = preferences.size.split(',')
+        ages = preferences.age.split(',')
+        months_exclude = []
+        if 'b' not in ages:
+            months_exclude.extend(list(range(1, 7)))
+        if 'y' not in ages:
+            months_exclude.extend(list(range(7, 15)))
+        if 'a' not in ages:
+            months_exclude.extend(list(range(15, 72)))
+        queryset = self.queryset.filter(
+            gender__in=genders, size__in=sizes).exclude(age__in=months_exclude)
+        if 's' not in ages:
+            queryset = queryset.filter(age__lt=72)
         if current_pk == -1:
             if status == 'undecided':
-                dog = self.queryset.exclude(userdog__user=current_user).first()
+                dog = queryset.exclude(userdog__user=current_user).first()
             else:
-                dog = self.queryset.filter(userdog__user=current_user,
+                dog = queryset.filter(userdog__user=current_user,
                                            userdog__status=status).first()
             if dog:
                 serializer = self.get_serializer(dog)
@@ -44,11 +59,11 @@ class DogRetrieveView(RetrieveAPIView):
                 return Response('')
         else:
             if status == 'undecided':
-                dog = self.queryset.exclude(
+                dog = queryset.exclude(
                     userdog__user=current_user).filter(
                     pk__gt=current_pk).first()
             else:
-                dog = self.queryset.filter(userdog__user=current_user,
+                dog = queryset.filter(userdog__user=current_user,
                                            userdog__status=status,
                                            pk__gt=current_pk).first()
             if dog:
